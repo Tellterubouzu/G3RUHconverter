@@ -39,45 +39,13 @@ This is also shown in the main function, but with four arguments
  Frag |Destination adress|Source adress|Control|PID  |Information|FCS   |Flag
  0x7E |   Callsign+SSID  |Callsign+SSID|0x03   |0xF0 |    Data   |CRC   |0x7E
  1Byte|      7Bytes      |    7Bytes   |1Byte  |1Byte|0~256Bytes |2Bytes|1Byte
- >>read more
- >>>https://qiita.com/OzoraKobo/items/e411705f2295d5a6f27d
-
-  Considering efficiency including downlink success probability,
-110Bytes is a good size for the information field
- ##########################   PIC18LF4620   ######################
- >>readmore
- >>>https://ww1.microchip.com/downloads/aemDocuments/documents/OTH/ProductDocuments/DataSheets/39626e.pdf
- #################Kyutech GS & Satellite callsign#################
- Project   | MITSUBA | YOTSUBA
- Ground    | JG6YBW  | -TBD-
- Satellite | JG6YOL  | -TBD-
-
- ###########################TXE430FMCW-302A-RU######################
-                                                                                                                        Mode-setting
-PSW : If 5V electric power supply and PSW pin lower than 1V, the communicator
-will active.
-                                        |FMCW0|FMCW1 |mode     |
-                                        |Low  | Low  |Wait mode|
-                                        |Low  |High  |AFSK mode|
-                                        |High | Low  | CW  mode| input CWKEY
-                                        |High | High |GMSK mode| input
-TRDAT,clock TRCLK PinAssign   Information 1 	CWKEY 	Low : Transmit /High :
-No signal 2		RXS 3		PLOCK 4   TRCLK		4.8kHz clk 5
-TRDAT 6		AFIN	 sub carrier of fm signal(1200/2200Hz) input 7
-FMPTT	 Low AFSK transmit 8		5V 9		GND 10	FMCW1 12
-FMCW0 12	PSW    Only on this pin, communicator will be data receive mode
-/
-
+ 
 /////////////////////////////////////Code////////////////////////////////////*/
 // include file list
 #include <stdint.h>
 #include <stdio.h>
-//#include <stdlibm.h>
-#include <stdlib.h>
-// include <18LF4620.h>
-// Device configuration
-//#invlude <DeviceConfiguration.h>
 
+#include <stdlib.h>
 // Define
 //#define Downlink_start 0x00
 
@@ -87,7 +55,6 @@ uint32_t d_tap_count;
 
 uint8_t Downlinkpacket[500] = {0};
 uint16_t packetsize = 0;
-// Interrupts
 
 // Prototype declaration
 void callsign(uint8_t *input, int len, uint8_t *output);
@@ -107,18 +74,18 @@ void byte_to_bit(uint8_t *data, uint16_t len);
 // User define Function
 void callsign(uint8_t *input, int len, uint8_t *output) {
   output[0] = 0x94;  // J = 4A
-  output[1] = 0x8e;  // G = 47
-  output[2] = 0x6c;  // 6 = 36
-  output[3] = 0xb2;  // Y = 59
-  output[4] = 0x84;  // B = 42
-  output[5] = 0xae;  // W = 57
+  output[1] = 0x94;  //
+  output[2] = 0x94;  // 
+  output[3] = 0x94;  // 
+  output[4] = 0x94;  // 
+  output[5] = 0x94;  // 
   output[6] = 0x60;  // SSID
   output[7] = 0x94;  // J = 4A
-  output[8] = 0x8e;  // G = 47
-  output[9] = 0x6c;  // 6 = 36
-  output[10] = 0xb2; // Y = 59
-  output[11] = 0x9E; // O = 4F
-  output[12] = 0x98; // L = 4C
+  output[8] = 0x94;  // 
+  output[9] = 0x94;  // 
+  output[10] = 0x94; // 
+  output[11] = 0x94; // 
+  output[12] = 0x94; // 
   output[13] = 0xe1; // SSID
   output[14] = 0x03; // control (3)
   output[15] = 0xf0; // PID
@@ -559,12 +526,6 @@ void decode(uint8_t *data, uint16_t datasize, uint8_t *output,
 int main(void) {
 
   uint8_t uplinkdata[] = {0x55, 0x07, 0xB0, 0x6F, 0x00, 0x7E, 0xFF};
-  /*First bytes of uplinkdata is address of cummnicator, this value must
-follow OBC specifications."0x55" is a dummy value
-Second bytes of uplinkdata The secound byte should indicate the size of
-the array
-
-  */
 
   Packetize(uplinkdata, Downlinkpacket, &packetsize);
 
