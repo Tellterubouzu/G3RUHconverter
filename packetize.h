@@ -24,36 +24,8 @@ before and after the frame Send data to the communicator using SPI communication
  
   Considering efficiency including downlink success probability,
 110Bytes is a good size for the information field
- ##########################   PIC18LF4620   ######################
- >>readmore
- >>>https://ww1.microchip.com/downloads/aemDocuments/documents/OTH/ProductDocuments/DataSheets/39626e.pdf
- #################Kyutech GS & Satellite callsign#################
- Project   | MITSUBA | YOTSUBA
- Ground    | JG6YBW  | -TBD-
- Satellite | JG6YOL  | -TBD-
 
- ###########################TXE430FMCW-302A-RU######################
-															Mode-setting
-PSW : If 5V electric power supply and PSW pin lower than 1V, the communicator
-will active. 
-					|FMCW0|FMCW1 |mode     |
-					|Low  | Low  |Wait mode|
-					|Low  |High  |AFSK mode|
-					|High | Low  | CW  mode| input CWKEY 
-					|High | High |GMSK mode| input TRDAT,clock TRCLK
-PinAssign   Information
-1 	CWKEY 	Low : Transmit /High : No signal
-2		RXS
-3		PLOCK
-4   TRCLK		4.8kHz clk
-5		TRDAT
-6		AFIN	 sub carrier of fm signal(1200/2200Hz) input
-7		FMPTT	 Low AFSK transmit
-8		5V
-9		GND
-10	FMCW1
-12	FMCW0
-12	PSW    Only on this pin, communicator will be data receive mode /
+
 
 /////////////////////////////////////Code////////////////////////////////////*/
 // include file list
@@ -61,9 +33,7 @@ PinAssign   Information
 #include <stdio.h>
 #include <stdlibm.h>
 #include <stdlib.h>
-// include <18LF4620.h>
-// Device configuration
-//#invlude <DeviceConfiguration.h>
+
 
 // Define
 //#define Downlink_start 0x00
@@ -91,19 +61,19 @@ void Packetize(uint8_t *data, uint16_t inputsize,uint8_t *packet,uint16_t *outpu
 // User define Function
 void callsign(uint8_t *input, int len, uint8_t *output) {
   output[0] = 0x94;  // J = 4A
-  output[1] = 0x8e;  // G = 47
-  output[2] = 0x6c;  // 6 = 36
-  output[3] = 0xb2;  // Y = 59
-  output[4] = 0x84;  // B = 42
-  output[5] = 0xae;  // W = 57
+  output[1] = 0x94;  
+  output[2] = 0x94;  
+  output[3] = 0x94; 
+  output[4] = 0x94;  
+  output[5] = 0x94;  
   output[6] = 0x60;  // SSID
   output[7] = 0x94;  // J = 4A
-  output[8] = 0x8e;  // G = 47
-  output[9] = 0x6c;  // 6 = 36
-  output[10] = 0xb2; // Y = 59
-  output[11] = 0x9E; // O = 4F
-  output[12] = 0x98; // L = 4C
-  output[13] = 0xe1; // SSID
+  output[8] = 0x94;  
+  output[9] = 0x94;  
+  output[10] = 0x94; 
+  output[11] = 0x94;
+  output[12] = 0x94; 
+  output[13] = 0x94; // SSID
   output[14] = 0x03; // control (3)
   output[15] = 0xf0; // PID
   for (int i = 0; i <= len; i++) {
@@ -321,7 +291,6 @@ void Packetize(uint8_t *input, uint16_t inputsize,uint8_t *packet,uint16_t *outp
   //enable_interrupts(INT_SSP);
 }
 // void main
-/*
 int main(void) {
   // bitstuff   NRZI ͋t
 
@@ -335,16 +304,14 @@ int main(void) {
   printf("in main function\r\n");
 
   for (uint16_t i = 0; i < packetsize; i++) {
-  	spi_write(Downlinkpacket[i]);
-    //printf("%02X ", Downlinkpacket[i]);
-    //if (i % 16 == 15) {
-      //printf("\n\n");
+    printf("%02X ", Downlinkpacket[i]);
+    if (i % 16 == 15) {
+      printf("\n\n");
     }
   }
   printf("\n\n");
 
   return 0;
 }
-*/
 
 
